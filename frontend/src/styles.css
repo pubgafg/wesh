@@ -1,0 +1,16 @@
+:root { --bg:#0b141a; --fg:#e9edef; --card:#111b21; --accent:#25d366; }
+body{ margin:0; font-family: system-ui, Arial; background:#f7f7f7; color:#111; }
+.dark body{ background:var(--bg); color:var(--fg); }
+.container{ max-width:980px; margin:0 auto; padding:16px; }
+.card{ background:#fff; padding:16px; border-radius:12px; box-shadow:0 6px 24px rgba(0,0,0,.06); margin-bottom:12px; }
+.dark .card{ background:var(--card); }
+.btn{ padding:10px 16px; border:none; border-radius:10px; cursor:pointer; font-weight:600; }
+.btn-primary{ background:var(--accent); color:#072a14; }
+.btn-outline{ background:transparent; border:2px solid var(--accent); color:var(--accent); }
+.input, select, textarea{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid #ddd; }
+.dark .input, .dark select, .dark textarea{ background:#0e1621; border:1px solid #2a2f33; color:var(--fg); }
+.row{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+@media(max-width:720px){ .row{ grid-template-columns:1fr;} }
+.nav{ display:flex; gap:8px; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.badge{ padding:4px 8px; border-radius:8px; background:#eef; font-size:12px; }
+.dark .badge{ background:#13222b; }
