@@ -1,54 +1,41 @@
 const express = require("express");
-const Ad = require("../models/Ad");
-const auth = require("../middleware/auth");
 const router = express.Router();
+const Ad = require("../models/Ad");
 
-// Create ad (auth)
-router.post("/", auth, async (req, res) => {
+// ➡️ ساخت آگهی جدید
+router.post("/", async (req, res) => {
   try {
-    const { title, desc, price, city, condition, category } = req.body;
-    const ad = await Ad.create({ title, desc, price, city, condition, category, owner: req.user.id });
-    res.json({ message: "created", ad });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+    const ad = new Ad(req.body);
+    await ad.save();
+    res.status(201).json(ad);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
-// List ads + filters (?city=...&condition=...&q=...)
+// ➡️ گرفتن همه‌ی آگهی‌ها
 router.get("/", async (req, res) => {
   try {
-    const { city, condition, q } = req.query;
-    const where = {};
-    if (city && city !== "all") where.city = city;
-    if (condition) where.condition = condition;
-    if (q) where.title = { $regex: q, $options: "i" };
-    const ads = await Ad.find(where).sort({ createdAt: -1 }).limit(200);
+    const ads = await Ad.find().sort({ createdAt: -1 });
     res.json(ads);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-// My ads (auth)
-router.get("/mine", auth, async (req, res) => {
-  const ads = await Ad.find({ owner: req.user.id }).sort({ createdAt: -1 });
-  res.json(ads);
-});
+// ➡️ گرفتن آگهی بر اساس دسته‌بندی یا شهر (جستجو ساده)
+router.get("/search", async (req, res) => {
+  try {
+    const { city, category } = req.query;
+    const filter = {};
+    if (city) filter.city = city;
+    if (category) filter.category = category;
 
-// Toggle sold (auth, owner only)
-router.patch("/:id/sold", auth, async (req, res) => {
-  const ad = await Ad.findOne({ _id: req.params.id, owner: req.user.id });
-  if (!ad) return res.status(404).json({ error: "Not found" });
-  ad.sold = !ad.sold;
-  await ad.save();
-  res.json({ message: "updated", ad });
-});
-
-// Delete (auth, owner only)
-router.delete("/:id", auth, async (req, res) => {
-  const ad = await Ad.findOneAndDelete({ _id: req.params.id, owner: req.user.id });
-  if (!ad) return res.status(404).json({ error: "Not found" });
-  res.json({ message: "deleted" });
+    const ads = await Ad.find(filter).sort({ createdAt: -1 });
+    res.json(ads);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
