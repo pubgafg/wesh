@@ -1,26 +1,29 @@
-// src/pages/PostAd.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import API from "../api";   // ✅ درست شد
+import API from "../api";
 
 function PostAd() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // بعدا اینجا می‌تونی API.postAd(...) بزنی
-    alert("آگهی شما ثبت شد ✅");
+    const form = new FormData(e.target);
+    const newAd = {
+      title: form.get("title"),
+      price: form.get("price"),
+      desc: form.get("desc"),
+    };
+    await API.addAd(newAd);
     navigate("/");
   };
 
   return (
     <div>
-      <h2>{t("ثبت آگهی جدید")}</h2>
+      <h2>ثبت آگهی جدید</h2>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="عنوان آگهی" required />
-        <input type="number" placeholder="قیمت" required />
+        <input name="title" type="text" placeholder="عنوان آگهی" required />
+        <input name="price" type="number" placeholder="قیمت" required />
+        <textarea name="desc" placeholder="توضیحات"></textarea>
         <button type="submit">ثبت</button>
       </form>
     </div>
