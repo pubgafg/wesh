@@ -1,23 +1,36 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import PostAd from "./PostAd";
+import { useState } from "react";
 
-function AdsList({ ads }) {
+function AdsList() {
+  const [ads, setAds] = useState([]);
+
+  const addAd = (newAd) => {
+    setAds([...ads, newAd]);
+  };
+
   return (
-    <div className="max-w-2xl mx-auto p-4 space-y-4">
-      <h2 className="text-xl font-bold mb-4">آگهی‌ها</h2>
-      {ads.map((ad, index) => (
-        <div key={index} className="p-4 bg-white rounded-2xl shadow-md flex items-center gap-4">
-          {ad.image && (
-            <img src={ad.image} alt={ad.title} className="w-20 h-20 object-cover rounded-lg" />
-          )}
-          <div>
-            <Link to={`/ads/${index}`} className="text-lg font-semibold text-blue-600">
-              {ad.title}
+    <div style={{ padding: "20px" }}>
+      <h1>آگهی‌ها</h1>
+      <PostAd onAddAd={addAd} />
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+        {ads.map((ad) => (
+          <div key={ad.id} style={{ border: "1px solid #ccc", padding: "10px" }}>
+            <Link to={`/ads/${ad.id}`} style={{ textDecoration: "none", color: "black" }}>
+              {ad.image && (
+                <img
+                  src={ad.image}
+                  alt={ad.title}
+                  style={{ width: "100%", height: "150px", objectFit: "cover" }}
+                />
+              )}
+              <h3>{ad.title}</h3>
+              <p>{ad.price} $</p>
             </Link>
-            <p className="text-gray-700">{ad.price} $</p>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
