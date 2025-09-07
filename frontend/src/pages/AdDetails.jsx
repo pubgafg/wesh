@@ -1,44 +1,22 @@
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import API from "../api";
 
 function AdDetails() {
-  const { id } = useParams(); // گرفتن آیدی آگهی از URL
-  const navigate = useNavigate();
+  const { id } = useParams();
+  const [ad, setAd] = useState(null);
 
-  // این دیتا فعلاً نمونه است. بعداً میشه از API گرفت
-  const fakeAds = [
-    { id: "1", title: "خانه برای فروش", price: "250000 افغانی", description: "خانه ۳ اطاقه در غزنی" },
-    { id: "2", title: "موتر Corolla", price: "750000 افغانی", description: "Corolla 2012 مدل، بسیار عالی" },
-  ];
+  useEffect(() => {
+    API.getAdById(id).then(setAd);
+  }, [id]);
 
-  const ad = fakeAds.find((item) => item.id === id);
-
-  if (!ad) {
-    return (
-      <div className="p-4">
-        <h2>آگهی یافت نشد ❌</h2>
-        <button
-          onClick={() => navigate("/")}
-          className="bg-green-600 text-white px-4 py-2 rounded mt-3"
-        >
-          بازگشت به خانه
-        </button>
-      </div>
-    );
-  }
+  if (!ad) return <p>در حال بارگذاری...</p>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-3">{ad.title}</h1>
-      <p className="text-lg mb-2">💰 قیمت: {ad.price}</p>
-      <p className="mb-4">{ad.description}</p>
-
-      <button
-        onClick={() => navigate("/")}
-        className="bg-green-600 text-white px-4 py-2 rounded"
-      >
-        بازگشت به خانه
-      </button>
+    <div>
+      <h2>{ad.title}</h2>
+      <p>قیمت: {ad.price} $</p>
+      <p>{ad.desc}</p>
     </div>
   );
 }
