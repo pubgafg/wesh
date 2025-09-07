@@ -1,18 +1,22 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import PostAd from "./pages/PostAd";
-import AdDetails from "./pages/AdDetails";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdsList from "./components/AdsList";
+import AdDetails from "./components/AdDetails";
+import { useState } from "react";
 
 function App() {
+  const [ads, setAds] = useState([]);
+
+  const addAd = (newAd) => {
+    setAds([...ads, newAd]);
+  };
+
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/post" element={<PostAd />} />
-        <Route path="/ad/:id" element={<AdDetails />} />
+        <Route path="/" element={<AdsList ads={ads} onAddAd={addAd} />} />
+        <Route path="/ads/:id" element={<AdDetails ads={ads} />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
