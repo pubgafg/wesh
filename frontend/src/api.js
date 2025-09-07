@@ -1,9 +1,16 @@
-// src/api.js
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-// آدرس اصلی بک‌اند (فعلاً روی لوکال هاست)
-export const API = "http://localhost:5000/api";
+export const ADS = {
+  GET_ALL: `${API_BASE}/ads`,
+  CREATE: `${API_BASE}/ads`,
+  GET_ONE: (id) => `${API_BASE}/ads/${id}`,
+};
 
-// اگه بعداً خواستی چند تا endpoint اضافه کنی اینجا بزار
-export const ADS = `${API}/ads`;
-export const USERS = `${API}/users`;
-export const UPLOAD = `${API}/upload`;
+export const USERS = {
+  REGISTER: `${API_BASE}/users/register`,
+  LOGIN: `${API_BASE}/users/login`,
+};
+
+export const UPLOAD = {
+  IMAGE: `${API_BASE}/upload/image`,
+};
