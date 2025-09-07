@@ -1,30 +1,18 @@
-// frontend/src/api.js
+// یک API ساده شبیه دیتابیس
+let ads = [
+  { id: 1, title: "موتر کرولا", price: 5000, desc: "مدل 2008، بسیار پاک" },
+  { id: 2, title: "خانه برای فروش", price: 30000, desc: "3 اطاقه، موقعیت عالی" },
+];
 
-// شبیه‌سازی API — بعداً می‌تونی به بک‌اند واقعی وصل کنی
 const API = {
-  // 📌 لاگین
-  login: async (username, password) => {
-    // اینجا فقط شبیه‌سازیه
-    if (username === "test" && password === "1234") {
-      return { token: "fake-token-123" };
-    } else {
-      throw new Error("نام کاربری یا رمز اشتباه است");
-    }
-  },
+  getAds: async () => ads,
 
-  // 📌 گرفتن لیست آگهی‌ها
-  getAds: async () => {
-    return [
-      { id: 1, title: "خانه برای فروش", price: "20000", desc: "خانه ۲ طبقه در کابل" },
-      { id: 2, title: "موتور سیکلت", price: "5000", desc: "موتور در حد نو" },
-      { id: 3, title: "موبایل سامسونگ", price: "12000", desc: "گوشی A52 کارکرده" },
-    ];
-  },
+  getAdById: async (id) => ads.find((ad) => ad.id === parseInt(id)),
 
-  // 📌 گرفتن جزئیات یک آگهی بر اساس id
-  getAdById: async (id) => {
-    const ads = await API.getAds();
-    return ads.find((ad) => ad.id === Number(id));
+  addAd: async (newAd) => {
+    newAd.id = ads.length + 1;
+    ads.push(newAd);
+    return newAd;
   },
 };
 
