@@ -1,16 +1,17 @@
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import axios from "axios";
 
-export const ADS = {
-  GET_ALL: `${API_BASE}/ads`,
-  CREATE: `${API_BASE}/ads`,
-  GET_ONE: (id) => `${API_BASE}/ads/${id}`,
-};
+// آدرس بک‌اند (Render یا لوکال)
+const API = axios.create({
+  baseURL: "https://wesh-backend.onrender.com/api", 
+});
 
-export const USERS = {
-  REGISTER: `${API_BASE}/users/register`,
-  LOGIN: `${API_BASE}/users/login`,
-};
+// توکن JWT رو اگر داشتیم بفرستیم
+API.interceptors.request.use((req) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    req.headers.Authorization = `Bearer ${token}`;
+  }
+  return req;
+});
 
-export const UPLOAD = {
-  IMAGE: `${API_BASE}/upload/image`,
-};
+export default API; // ✅ دیگه export default داریم
