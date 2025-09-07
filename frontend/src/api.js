@@ -1,19 +1,19 @@
-// یک API ساده شبیه دیتابیس
-let ads = [
-  { id: 1, title: "موتر کرولا", price: 5000, desc: "مدل 2008، بسیار پاک" },
-  { id: 2, title: "خانه برای فروش", price: 30000, desc: "3 اطاقه، موقعیت عالی" },
-];
+// frontend/src/services/api.js
+const API_BASE =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000" // وقتی لوکال تست می‌کنی
+    : "https://wesh-backend.onrender.com"; // روی Render
 
-const API = {
-  getAds: async () => ads,
+export async function fetchAds() {
+  const res = await fetch(`${API_BASE}/api/ads`);
+  return res.json();
+}
 
-  getAdById: async (id) => ads.find((ad) => ad.id === parseInt(id)),
-
-  addAd: async (newAd) => {
-    newAd.id = ads.length + 1;
-    ads.push(newAd);
-    return newAd;
-  },
-};
-
-export default API;
+export async function createAd(ad) {
+  const res = await fetch(`${API_BASE}/api/ads`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(ad),
+  });
+  return res.json();
+}
