@@ -1,38 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function AdsList({ ads, onAddAd }) {
-  return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">آگهی‌ها</h2>
-        <Link
-          to="/post"
-          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
-        >
-          + ثبت آگهی
-        </Link>
-      </div>
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
 
-      {ads.length === 0 ? (
-        <p className="text-gray-500">هیچ آگهی ثبت نشده است.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {ads.map((ad, index) => (
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!title || !description || !price) return;
+
+    const newAd = { title, description, price };
+    onAddAd(newAd);
+
+    setTitle("");
+    setDescription("");
+    setPrice("");
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-4">لیست آگهی‌ها</h1>
+
+      {/* فرم اضافه کردن آگهی */}
+      <form onSubmit={handleSubmit} className="mb-6 space-y-2">
+        <input
+          type="text"
+          placeholder="عنوان آگهی"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="border p-2 w-full rounded"
+        />
+        <textarea
+          placeholder="توضیحات"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          type="text"
+          placeholder="قیمت"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          className="border p-2 w-full rounded"
+        />
+        <button
+          type="submit"
+          className="bg-green-600 text-white px-4 py-2 rounded"
+        >
+          ➕ اضافه کردن آگهی
+        </button>
+      </form>
+
+      {/* نمایش لیست آگهی‌ها */}
+      <ul className="space-y-3">
+        {ads.map((ad, index) => (
+          <li key={index} className="border p-4 rounded shadow">
             <Link
-              key={index}
               to={`/ads/${index}`}
-              className="block border rounded-xl p-4 shadow hover:shadow-lg transition"
+              className="text-xl font-semibold text-blue-600 hover:underline"
             >
-              <h3 className="text-lg font-semibold">{ad.title}</h3>
-              <p className="text-gray-600">{ad.price} $</p>
-              <p className="text-sm text-gray-400 mt-2 line-clamp-2">
-                {ad.description}
-              </p>
+              {ad.title}
             </Link>
-          ))}
-        </div>
-      )}
+            <p className="text-gray-600">💲 {ad.price}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
