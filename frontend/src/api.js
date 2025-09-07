@@ -1,8 +1,9 @@
-// frontend/src/api.js
-import axios from "axios";
+// src/api.js
 
-const api = axios.create({
-  baseURL: "https://wesh-backend.onrender.com/api", // آدرس بک‌اندت روی Render
-});
+// آدرس اصلی بک‌اند (فعلاً لوکال هاست، بعداً می‌تونی عوضش کنی)
+export const API = "http://localhost:5000/api";
 
-export default api;
+// مثال برای یک endpoint دیگه
+export const IMAGE_UPLOAD = `${API}/upload`;
+export const ADS = `${API}/ads`;
+export const USERS = `${API}/users`;
