@@ -1,56 +1,52 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function PostAd({ addAd }) {
+function PostAd({ onAddAd }) {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
-  const [image, setImage] = useState(null);
+  const [description, setDescription] = useState("");
   const navigate = useNavigate();
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addAd({ title, price, image });
+    if (!title || !price) return;
+
+    onAddAd({ title, price, description });
     navigate("/");
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded-2xl shadow-md">
-      <h2 className="text-xl font-bold mb-4">ثبت آگهی</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="container mx-auto p-4 max-w-md">
+      <h2 className="text-xl font-bold mb-4">ثبت آگهی جدید</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow rounded-xl p-4 space-y-4"
+      >
         <input
           type="text"
           placeholder="عنوان آگهی"
-          className="w-full border rounded p-2"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          required
+          className="w-full border p-2 rounded-lg"
         />
         <input
           type="number"
-          placeholder="قیمت"
-          className="w-full border rounded p-2"
+          placeholder="قیمت (دلار)"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          required
+          className="w-full border p-2 rounded-lg"
         />
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-        {image && <img src={image} alt="preview" className="w-32 mt-2 rounded" />}
+        <textarea
+          placeholder="توضیحات"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full border p-2 rounded-lg"
+        ></textarea>
         <button
           type="submit"
-          className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+          className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
         >
-          ثبت
+          ثبت آگهی
         </button>
       </form>
     </div>
