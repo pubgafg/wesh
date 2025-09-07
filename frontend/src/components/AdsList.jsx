@@ -6,66 +6,66 @@ function AdsList({ ads, onAddAd }) {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!title || !description || !price) return;
-
-    const newAd = { title, description, price };
-    onAddAd(newAd);
-
+  const handleAdd = () => {
+    if (!title || !price) return;
+    onAddAd({ title, description, price });
     setTitle("");
     setDescription("");
     setPrice("");
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-4">لیست آگهی‌ها</h1>
+    <div className="max-w-2xl mx-auto p-4">
+      <h1 className="text-2xl font-bold text-green-700 mb-6">لیست آگهی‌ها</h1>
 
-      {/* فرم اضافه کردن آگهی */}
-      <form onSubmit={handleSubmit} className="mb-6 space-y-2">
+      {/* فرم افزودن آگهی */}
+      <div className="bg-white shadow p-4 rounded-xl mb-6">
         <input
           type="text"
           placeholder="عنوان آگهی"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 w-full rounded"
+          className="w-full border p-2 mb-2 rounded"
         />
         <textarea
           placeholder="توضیحات"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="border p-2 w-full rounded"
+          className="w-full border p-2 mb-2 rounded"
         />
         <input
           type="text"
-          placeholder="قیمت"
+          placeholder="قیمت (تومان)"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          className="border p-2 w-full rounded"
+          className="w-full border p-2 mb-2 rounded"
         />
         <button
-          type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded"
+          onClick={handleAdd}
+          className="w-full bg-green-600 text-white py-2 rounded mt-2"
         >
-          ➕ اضافه کردن آگهی
+          + ثبت آگهی
         </button>
-      </form>
+      </div>
 
-      {/* نمایش لیست آگهی‌ها */}
-      <ul className="space-y-3">
-        {ads.map((ad, index) => (
-          <li key={index} className="border p-4 rounded shadow">
+      {/* نمایش آگهی‌ها */}
+      <div className="grid gap-4">
+        {ads.length === 0 ? (
+          <p className="text-gray-500">هیچ آگهی ثبت نشده است.</p>
+        ) : (
+          ads.map((ad, index) => (
             <Link
+              key={index}
               to={`/ads/${index}`}
-              className="text-xl font-semibold text-blue-600 hover:underline"
+              className="block bg-white shadow rounded-xl p-4 border hover:shadow-lg transition"
             >
-              {ad.title}
+              <h2 className="text-lg font-bold text-gray-800">{ad.title}</h2>
+              <p className="text-gray-600 text-sm truncate">{ad.description}</p>
+              <p className="text-green-700 font-semibold mt-1">{ad.price} تومان</p>
             </Link>
-            <p className="text-gray-600">💲 {ad.price}</p>
-          </li>
-        ))}
-      </ul>
+          ))
+        )}
+      </div>
     </div>
   );
 }
